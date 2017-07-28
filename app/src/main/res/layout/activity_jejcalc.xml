@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" android:weightSum="1">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/clearScreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="     C    "/>
+        <Button
+            android:id="@+id/clearAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" AC "/>
+        <Button
+            android:id="@+id/calc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=" calc this line "/>
+    </LinearLayout>
+    <EditText android:id="@+id/editText1"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:inputType="textMultiLine"
+        android:editable="true"
+        android:gravity="top"
+        android:isScrollContainer="true"
+        android:bufferType="editable"
+        android:maxLines="8">
+        <requestFocus>
+        </requestFocus>
+    </EditText>
+
+</LinearLayout>
