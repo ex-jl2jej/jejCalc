@@ -18,6 +18,8 @@ import android.widget.Button;
 
 import com.gmail.jl2jej.jejcalc.Parser;
 
+import java.util.ArrayList;
+
 public class JejcalcActivity extends Activity {
     EditText input;
     Parser par;
@@ -75,51 +77,53 @@ public class JejcalcActivity extends Activity {
     private void calcAndResultSet(boolean returnKey)
     {
         String text = input.getText().toString();
-        int ecp = input.getSelectionStart();
-        String textStr;
+        String[] lines = text.split("\n", 0);
+        int cursorPos = input.getSelectionStart();
+        int lineLen = 0;
+        int lineNum = 0;
+        ArrayList<String> lineArray = new ArrayList<String>();
 
-        if( returnKey == true ) {
-            text = text.substring(0,ecp-1)+ text.substring(ecp);
-            ecp = ecp - 1;
+        for (int i = 0 ; i < lines.length ; i++) {
+            lineArray.add(lines[i]);
         }
-        ecp = text.indexOf("\n", ecp );
-        if( ecp < 0 ) {
-            ecp = text.length();
+
+        for (lineNum = 0 ; lineArray.size() > lineNum ; lineNum++ ) {
+            lineLen += lineArray.get(lineNum).length() + 1;
+            if (lineLen > cursorPos ) {
+                break;
+            }
         }
-        textStr = text.substring(0, ecp);
 
-
-        int scp = textStr.lastIndexOf("\n");
-        if( scp < 0 ) {
-            scp = 0;
+        if (returnKey == true) {
+            if (lineLen > cursorPos) {
+                return;
+            } else {
+                lineNum--;
+            }
         }
 
         //String result = textStr + "\n" + par.doYyparse( textStr.substring(scp,ecp) );
-        String result = par.doYyparse( textStr.substring(scp,ecp) );
-        int ncr = 0;
-        int ccp = 0;
-        while((ccp = result.indexOf("\n",ccp+1)) > 0 ) {
-            ++ncr;
-        }
-        String textEndStr = text.substring(ecp);
-        if( textEndStr.length() > 1 ) {
-            int ncp = 0;
-            while((--ncr) >= 0 ) {
-                ncp = textEndStr.indexOf("\n",ncp+1);
-            }
-            if( ncp > 0 ) {
-                textEndStr = textEndStr.substring(ncp+1);
+        String result = par.doYyparse( lineArray.get(lineNum) );
+        String[] resultLines = result.split("\n", 0);
+        for (int i = 0 ; i < resultLines.length ; i++) {
+            if (lineArray.size() <= lineNum + 1 + i) {
+                lineArray.add(resultLines[i]);
+            } else {
+                lineArray.set(lineNum + 1 + i, resultLines[i]);
             }
         }
-        if( textEndStr.startsWith("\n") == true ) {
-            input.setText( textStr + result + textEndStr );
-            input.setSelection((textStr + result).length()+1);
-        } else {
-            input.setText( textStr + "\n" + result + textEndStr );
-            input.setSelection((textStr + "\n" + result).length());
+
+        String inputResult = "";
+        for (int i = 0 ; i < lineArray.size() ; i++) {
+            inputResult += lineArray.get(i) + "\n";
+            if (i==lineNum+resultLines.length) {
+                cursorPos = inputResult.length();
+            }
         }
-        Log.v("POSITION", "Position = " + ecp );
-        Log.v("KeyUp", "ENTER");
+        input.setText(inputResult);
+        input.setSelection(cursorPos);
+        Log.i("POSITION", "Position = " + Integer.toString(cursorPos) );
+        Log.i("KeyUp", "ENTER");
     }
 
     @Override
@@ -127,9 +131,9 @@ public class JejcalcActivity extends Activity {
         if( keyCode == KeyEvent.KEYCODE_ENTER ) {
             calcAndResultSet(true);
         } else if (keyCode == KeyEvent.KEYCODE_DEL) {
-            Log.v( "KeyUp", "DEL");
+            Log.i( "KeyUp", "DEL");
         } else {
-            Log.v("KeyUp", "keycode = " + keyCode );
+            Log.i("KeyUp", "keycode = " + keyCode );
         }
         return super.onKeyUp(keyCode, event);
     }

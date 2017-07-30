@@ -33,7 +33,7 @@
         android:gravity="top"
         android:isScrollContainer="true"
         android:bufferType="editable"
-        android:maxLines="8">
+        android:maxLines="20">
         <requestFocus>
         </requestFocus>
     </EditText>
