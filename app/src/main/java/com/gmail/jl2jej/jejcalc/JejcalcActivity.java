@@ -13,8 +13,6 @@ import android.view.WindowManager;
 
 import android.widget.EditText;
 import android.widget.Button;
-//import android.text.Editable;
-
 
 import com.gmail.jl2jej.jejcalc.Parser;
 
